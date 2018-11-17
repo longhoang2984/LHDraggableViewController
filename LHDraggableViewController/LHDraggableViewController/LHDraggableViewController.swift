@@ -17,67 +17,68 @@ enum UIPanGestureRecognizerDirection : Int {
     case right
 }
 
-public protocol DraggableViewControllerDelegate: class {
+public protocol LHDraggableViewControllerDelegate: class {
     func removeController()
 }
 
-public class DraggableViewController: UIViewController, UIGestureRecognizerDelegate {
+open class LHDraggableViewController: UIViewController, UIGestureRecognizerDelegate {
     let screenHeight = UIScreen.main.bounds.size.height
     let screenWidth = UIScreen.main.bounds.size.width
-    var bodyView: UIView = UIView()
+    private(set) open var bodyView: UIView = UIView()
     //please add controller on this
-    var controllerView: UIView = UIView()
+    private(set) open var controllerView: UIView = UIView()
     //please add loading spiner on this
-    var messageView: UIView = UIView()
-    var videoWrapperFrame = CGRect.zero
-    var minimizedVideoFrame = CGRect.zero
-    var pageWrapperFrame = CGRect.zero
-    var wFrame = CGRect.zero
-    var vFrame = CGRect.zero
-    var _touchPositionInHeaderY: CGFloat = 0.0
-    var _touchPositionInHeaderX: CGFloat = 0.0
-    var direction: UIPanGestureRecognizerDirection?
-    var tapRecognizer: UITapGestureRecognizer?
-    var transparentBlackSheet: UIView = UIView()
-    var isExpandedMode = false
-    var pageWrapper: UIView = UIView()
-    var videoWrapper: UIView = UIView()
-    var videoView: UIView = UIView()
-    var borderView: UIView = UIView()
-    var maxH: CGFloat = 0.0
-    var maxW: CGFloat = 0.0
-    var videoHeightRatio: CGFloat = 0.0
-    var finalViewOffsetY: CGFloat = 0.0
-    var minimamVideoHeight: CGFloat = 0.0
-    var parentView: UIView = UIView()
-    var isDisplayController = false
-    var hideControllerTimer: Timer?
-    var isMinimizingByGesture = false
-    var isAppear = false
-    var isSetuped = false
-    var windowFrame = CGRect.zero
-    var centerDraggableView: CGPoint = .zero
-    let finalMargin: CGPoint = CGPoint(x: 3, y: 60)
-    let minimamVideoWidth: CGFloat = 140
-    let flickVelocity: CGFloat = 1000
-    var isYoutubeType: Bool = true
-    weak var delegate: DraggableViewControllerDelegate?
+    private(set) open var messageView: UIView = UIView()
+    private var videoWrapperFrame = CGRect.zero
+    private var minimizedVideoFrame = CGRect.zero
+    private var pageWrapperFrame = CGRect.zero
+    private var wFrame = CGRect.zero
+    private var vFrame = CGRect.zero
+    private var _touchPositionInHeaderY: CGFloat = 0.0
+    private var _touchPositionInHeaderX: CGFloat = 0.0
+    private var direction: UIPanGestureRecognizerDirection?
+    private var tapRecognizer: UITapGestureRecognizer?
+    private var transparentBlackSheet: UIView = UIView()
+    private var isExpandedMode = false
+    private var pageWrapper: UIView = UIView()
+    private var videoWrapper: UIView = UIView()
+    private var videoView: UIView = UIView()
+    private var borderView: UIView = UIView()
+    private var maxH: CGFloat = 0.0
+    private var maxW: CGFloat = 0.0
+    private var videoHeightRatio: CGFloat = 0.0
+    private var finalViewOffsetY: CGFloat = 0.0
+    private var minimamVideoHeight: CGFloat = 0.0
+    private var parentView: UIView = UIView()
+    private var isDisplayController = false
+    private var hideControllerTimer: Timer?
+    private var isMinimizingByGesture = false
+    private var isAppear = false
+    private var isSetuped = false
+    private var windowFrame = CGRect.zero
+    private var centerDraggableView: CGPoint = .zero
+    private let finalMargin: CGPoint = CGPoint(x: 3, y: 60)
+    private let minimamVideoWidth: CGFloat = 140
+    private let flickVelocity: CGFloat = 1000
+    private(set) open var isYoutubeType: Bool = true
+    open weak var delegate: LHDraggableViewControllerDelegate?
     
-    func didExpand() {
+    open func didExpand() {
     }
-    func didMinimize() {
+    open func didMinimize() {
     }
-    func didStartMinimizeGesture() {
+    open func didStartMinimizeGesture() {
         UIApplication.shared.isStatusBarHidden = false
     }
-    func didFullExpandByGesture() {
+    open func didFullExpandByGesture() {
     }
-    func didDisappear() {
+    open func didDisappear() {
     }
-    func didReAppear() {
+    open func didReAppear() {
     }
     
-    func show() {
+    public final func show(isYoutubeType: Bool = true) {
+        self.isYoutubeType = isYoutubeType
         if !isSetuped {
             setup()
         } else {
@@ -87,7 +88,7 @@ public class DraggableViewController: UIViewController, UIGestureRecognizerDeleg
         }
     }
     
-    func setup() {
+    private func setup() {
         isSetuped = true
         print("showVideoViewControllerOnParentVC")
         //        UIInterfaceOrientation.IsLandscape
@@ -102,7 +103,7 @@ public class DraggableViewController: UIViewController, UIGestureRecognizerDeleg
         perform(#selector(self.showThisView), with: nil, afterDelay: 0.0)
         isAppear = true
     }
-    func setupViews(withVideoView vView: UIView?, videoViewHeight videoHeight: CGFloat) {
+    open func setupViews(withVideoView vView: UIView?, videoViewHeight videoHeight: CGFloat) {
         print("setupViewsWithVideoView")
         videoView = vView ?? UIView()
         windowFrame = UIScreen.main.bounds
@@ -144,7 +145,7 @@ public class DraggableViewController: UIViewController, UIGestureRecognizerDeleg
         transparentBlackSheet.alpha = 1
         appearAnimation()
     }
-    func appearAnimation() {
+    private func appearAnimation() {
         view.frame = CGRect(x: windowFrame.size.width - 50, y: windowFrame.size.height - 50, width: windowFrame.size.width, height: windowFrame.size.height)
         view.transform = CGAffineTransform(scaleX: 0.2, y: 0.2)
         view.alpha = 0
@@ -157,7 +158,7 @@ public class DraggableViewController: UIViewController, UIGestureRecognizerDeleg
         }
     }
     
-    func afterAppearAnimation() {
+    open func afterAppearAnimation() {
         videoWrapper.backgroundColor = UIColor.clear
         videoView.backgroundColor = videoWrapper.backgroundColor
         getWindow().addSubview(transparentBlackSheet)
@@ -180,11 +181,11 @@ public class DraggableViewController: UIViewController, UIGestureRecognizerDeleg
         videoWrapper.addGestureRecognizer(pan)
         isExpandedMode = true
     }
-    func disappear() {
+    open func disappear() {
         isAppear = false
     }
     
-    func reAppearWithAnimation() {
+    private func reAppearWithAnimation() {
         borderView.alpha = 0
         transparentBlackSheet.alpha = 0
         videoWrapper.alpha = 0
@@ -222,7 +223,7 @@ public class DraggableViewController: UIViewController, UIGestureRecognizerDeleg
         }
     }
     
-    func bringToFront() {
+    private func bringToFront() {
         if isSetuped {
             getWindow().bringSubviewToFront(view)
             getWindow().bringSubviewToFront(transparentBlackSheet)
@@ -230,7 +231,7 @@ public class DraggableViewController: UIViewController, UIGestureRecognizerDeleg
             getWindow().bringSubviewToFront(videoWrapper)
         }
     }
-    func getWindow() -> UIWindow {
+    private func getWindow() -> UIWindow {
         return UIApplication.shared.delegate!.window!!
     }
     
@@ -245,15 +246,15 @@ public class DraggableViewController: UIViewController, UIGestureRecognizerDeleg
     deinit {
     }
     
-    func showMessageView() {
+    open func showMessageView() {
         messageView.isHidden = false
     }
     
-    func hideMessageView() {
+    open func hideMessageView() {
         messageView.isHidden = true
     }
     
-    func setHideControllerTimer() {
+    private func setHideControllerTimer() {
         if let `hideControllerTimer` = hideControllerTimer {
             if hideControllerTimer.isValid {
                 hideControllerTimer.invalidate()
@@ -263,7 +264,7 @@ public class DraggableViewController: UIViewController, UIGestureRecognizerDeleg
         self.hideControllerTimer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(self.hideControllerView), userInfo: nil, repeats: false)
     }
     
-    @objc func showControllerView() {
+    @objc private func showControllerView() {
         isDisplayController = true
         setHideControllerTimer()
         UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseInOut, animations: {
@@ -271,7 +272,7 @@ public class DraggableViewController: UIViewController, UIGestureRecognizerDeleg
         }) { finished in
         }
     }
-    @objc func hideControllerView() {
+    @objc private func hideControllerView() {
         isDisplayController = false
         guard let `hideControllerTimer` = hideControllerTimer else { return }
         if hideControllerTimer.isValid {
@@ -283,10 +284,10 @@ public class DraggableViewController: UIViewController, UIGestureRecognizerDeleg
         }
     }
     
-    func showControllerAfterExpanded() {
+    private func showControllerAfterExpanded() {
         Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.showControllerView), userInfo: nil, repeats: false)
     }
-    @objc func onTapExpandedVideoView() {
+    @objc private func onTapExpandedVideoView() {
         print("onTapExpandedVideoView")
         if controllerView.alpha == 0.0 {
             showControllerView()
@@ -294,12 +295,12 @@ public class DraggableViewController: UIViewController, UIGestureRecognizerDeleg
             hideControllerView()
         }
     }
-    @objc func expandView(onTap sender: UITapGestureRecognizer?) {
+    @objc private func expandView(onTap sender: UITapGestureRecognizer?) {
         expandView()
         showControllerAfterExpanded()
     }
     
-    @objc func panAction(_ recognizer: UIPanGestureRecognizer?) {
+    @objc private func panAction(_ recognizer: UIPanGestureRecognizer?) {
         guard let `recognizer` = recognizer, let activeView = recognizer.view else { return }
         let touchPosInViewY: CGFloat = recognizer.location(in: view).y
         if recognizer.state == .began {
@@ -433,7 +434,7 @@ public class DraggableViewController: UIViewController, UIGestureRecognizerDeleg
         }
     }
     
-    func detectPanDirection(_ velocity: CGPoint) {
+    private func detectPanDirection(_ velocity: CGPoint) {
         let isVerticalGesture: Bool = fabs(Float(velocity.y)) > fabs(Float(velocity.x))
         if isVerticalGesture {
             if velocity.y > 0 {
@@ -450,7 +451,7 @@ public class DraggableViewController: UIViewController, UIGestureRecognizerDeleg
         }
     }
     
-    func adjustView(onVerticalPan newOffsetY: CGFloat, recognizer: UIPanGestureRecognizer?) {
+    private func adjustView(onVerticalPan newOffsetY: CGFloat, recognizer: UIPanGestureRecognizer?) {
         guard let `recognizer` = recognizer else { return }
         var newOffsetY = newOffsetY
         let touchPosInViewY: CGFloat = recognizer.location(in: view).y
@@ -496,7 +497,7 @@ public class DraggableViewController: UIViewController, UIGestureRecognizerDeleg
         recognizer.setTranslation(CGPoint.zero, in: recognizer.view)
     }
     
-    func adjustView(onHorizontalPan recognizer: UIPanGestureRecognizer?) {
+    private func adjustView(onHorizontalPan recognizer: UIPanGestureRecognizer?) {
         guard let `recognizer` = recognizer else { return }
         let x: CGFloat = recognizer.location(in: view).x
         if pageWrapper.alpha <= 0 {
@@ -529,7 +530,7 @@ public class DraggableViewController: UIViewController, UIGestureRecognizerDeleg
         }
     }
     
-    func calcNewFrame(withParsentage persentage: CGFloat, newOffsetY: CGFloat, location: CGPoint = .zero) {
+    private func calcNewFrame(withParsentage persentage: CGFloat, newOffsetY: CGFloat, location: CGPoint = .zero) {
         let newWidth: CGFloat = minimamVideoWidth + ((maxW - minimamVideoWidth) * (1 - persentage))
         let newHeight: CGFloat = newWidth * videoHeightRatio
         var newOffsetX: CGFloat = location.x
@@ -550,7 +551,7 @@ public class DraggableViewController: UIViewController, UIGestureRecognizerDeleg
             wFrame.midX += newOffsetX
         }
     }
-    func setFinalFrame() {
+    private func setFinalFrame() {
         vFrame.size.width = minimamVideoWidth
         vFrame.size.height = vFrame.size.width * videoHeightRatio
         vFrame.origin.y = maxH - vFrame.size.height - finalMargin.y
@@ -560,7 +561,7 @@ public class DraggableViewController: UIViewController, UIGestureRecognizerDeleg
     }
     
     
-    func expandView() {
+    private func expandView() {
         UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseInOut, animations: {
             self.pageWrapper.frame = self.pageWrapperFrame
             self.videoWrapper.frame = self.videoWrapperFrame
@@ -596,7 +597,7 @@ public class DraggableViewController: UIViewController, UIGestureRecognizerDeleg
         }
     }
     
-    func minimizeView() {
+    public final func minimizeView() {
         setFinalFrame()
         hideControllerView()
         UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveLinear, animations: {
@@ -635,7 +636,7 @@ public class DraggableViewController: UIViewController, UIGestureRecognizerDeleg
         }
     }
     
-    func animateMiniView(toNormalPosition recognizer: UIPanGestureRecognizer?, completion: @escaping () -> Void) {
+    private func animateMiniView(toNormalPosition recognizer: UIPanGestureRecognizer?, completion: @escaping () -> Void) {
         setFinalFrame()
         UIView.animate(withDuration: 0.25, delay: 0.0, options: .curveEaseInOut, animations: {
             self.pageWrapper.frame = self.wFrame
@@ -653,7 +654,7 @@ public class DraggableViewController: UIViewController, UIGestureRecognizerDeleg
         recognizer?.setTranslation(CGPoint.zero, in: recognizer?.view)
     }
     
-    func fadeOutView(toRight recognizer: UIPanGestureRecognizer?, completion: @escaping () -> Void) {
+    private func fadeOutView(toRight recognizer: UIPanGestureRecognizer?, completion: @escaping () -> Void) {
         vFrame.origin.x = maxW + minimamVideoWidth
         wFrame.origin.x = maxW + minimamVideoWidth
         UIView.animate(withDuration: 0.1, delay: 0.0, options: .curveEaseInOut, animations: {
@@ -673,7 +674,7 @@ public class DraggableViewController: UIViewController, UIGestureRecognizerDeleg
         recognizer?.setTranslation(CGPoint.zero, in: recognizer?.view)
     }
     
-    func fadeOutView(toLeft recognizer: UIPanGestureRecognizer?, completion: @escaping () -> Void) {
+    private func fadeOutView(toLeft recognizer: UIPanGestureRecognizer?, completion: @escaping () -> Void) {
         vFrame.origin.x = -maxW
         wFrame.origin.x = -maxW
         UIView.animate(withDuration: 0.1, delay: 0.0, options: .curveEaseInOut, animations: {
@@ -694,7 +695,7 @@ public class DraggableViewController: UIViewController, UIGestureRecognizerDeleg
     }
     
     // MARK:- Pan Gesture Delagate
-    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+    private func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if let panGesture = gestureRecognizer as? UIPanGestureRecognizer, isExpandedMode {
             let velocity: CGPoint = panGesture.velocity(in: panGesture.view)
             detectPanDirection(velocity)
@@ -718,14 +719,14 @@ public class DraggableViewController: UIViewController, UIGestureRecognizerDeleg
         return true
     }
     
-    override public var prefersStatusBarHidden: Bool {
+    override open var prefersStatusBarHidden: Bool {
         return true
     }
-    override public var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return UIInterfaceOrientationMask.portrait
     }
     
-    override public var shouldAutorotate: Bool {
+    override open var shouldAutorotate: Bool {
         return false
     }
 }

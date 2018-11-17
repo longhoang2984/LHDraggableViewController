@@ -1,0 +1,6 @@
+framework module Pods_LHDraggableViewController_Example {
+  umbrella header "Pods-LHDraggableViewController Example-umbrella.h"
+
+  export *
+  module * { export * }
+}

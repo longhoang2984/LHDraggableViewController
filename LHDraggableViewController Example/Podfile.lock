@@ -1,0 +1,16 @@
+PODS:
+  - LHDraggableViewController (1.0.0)
+
+DEPENDENCIES:
+  - LHDraggableViewController (from `../LHDraggableViewController/`)
+
+EXTERNAL SOURCES:
+  LHDraggableViewController:
+    :path: "../LHDraggableViewController/"
+
+SPEC CHECKSUMS:
+  LHDraggableViewController: bfa17328a4efd586afe6bd7e252f0563c15c8f13
+
+PODFILE CHECKSUM: 82ba055bd65af0dd35d1bd581e6242e458527e0a
+
+COCOAPODS: 1.5.3

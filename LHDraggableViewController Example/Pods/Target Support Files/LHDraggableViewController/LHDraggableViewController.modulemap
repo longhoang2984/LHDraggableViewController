@@ -1,0 +1,6 @@
+framework module LHDraggableViewController {
+  umbrella header "LHDraggableViewController-umbrella.h"
+
+  export *
+  module * { export * }
+}
